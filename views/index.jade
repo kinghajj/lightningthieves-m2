@@ -20,7 +20,7 @@ html(ng-app="lightningthieves")
   body
 
     div.container
-      h1 lightningthieves Mining Status Center
+      h1 "lightningthieves" Mining Status Center
 
       div.row
         div.span3(ng-controller='FetchCtrl')
@@ -112,11 +112,74 @@ html(ng-app="lightningthieves")
               td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
 
         div.span6
-          h2 About
-          p Blah blah blah.
+          h2 About the Group
+          p
+            | <strong>lightningthieves</strong> is a&nbsp;
+            a(href='http://litecoin.org/', title='A Bitcoin derivative.')
+              | Litecoin
+            |  mining group on&nbsp;
+            a(href='http://ltc.kattare.com/', title='Great pool; 0% fees!')
+              | burnside's pool
+            | , operating since mid-April 2013. Currently, we're running a 7970,
+            | hashing at around 630 kh/s.
 
-          h2 Details
-          p Lorem ipsum...
+          h2 About This Site
+          p
+            | The server periodically fetches from various&nbsp;
+            a(href='http://en.wikipedia.org/wiki/JSON',
+              title='Imperfect but practical.')
+              | JSON
+            | &nbsp;APIs. When you load this page, a connection between your
+            | browser and the server keeps this page up-to-date with the latest
+            | data.
+          p
+            | You can press the table headings of the exchange rates to change
+            | the units displayed in the other tables.
+          p
+            | You can press "Fetch" to request that the server fetch data from
+            | its sources again, which also causes an update to be sent. Press
+            | "Update" requests for only an update.
+          p
+            | This site was written not only so that the non-technical members
+            | of the group could have a streamlined way to monitor the markets
+            | and our miner, but also because the author wanted to experiment in
+            | web site creation. This web site is written in&nbsp;
+            a(href='http://nodejs.org', title='Easy to deploy to Heroku')
+              | node.js
+            | ,&nbsp;
+            a(href='http://en.wikipedia.org/wiki/HTML5',
+              title='Simple, modern web design.') HTML5
+            | ,&nbsp;
+            a(href='http://en.wikipedia.org/wiki/CSS',
+              title='Separation of content and presentation.') CSS
+            | , and&nbsp;
+            a(href='http://en.wikipedia.org/wiki/JavaScript',
+              title="Hey, it's not PHP.") JavaScript
+            | . It utilizes the&nbsp;
+            a(href='http://angularjs.org/',
+              title='Easy responsive UIs') AngularJS
+            | ,&nbsp;
+            a(href='http://twitter.github.io/bootstrap/',
+              title='Easy pretty page layouts.') Bootstrap
+            | ,&nbsp;
+            a(href='http://expressjs.com/',
+              title='Easy custom HTTP servers.') express
+            | , and&nbsp;
+            a(href='http://socket.io/',
+              title='Easy client-server communication.') socket.io
+            |  libraries. You'll notice it doesn't use&nbsp;
+            a(href='http://jquery.com/',
+              title="Maybe I'll need it, but AngularJS is pretty awesome.")
+              | jQuery
+            | .
+          p
+            | Litecoin: LgGmJyTYzTRGBoC8Xjbvu42SCW19dtkJtX <br />
+            | Bitcoin: 1A6srmrFTBrtFCB9ixJ4ZrxhpdNWHApaM4
+          p
+            | You can view the code for this site on&nbsp;
+            a(href='https://github.com/kinghajj/lightningthieves-m2'
+              title='Would you prefer hg? Get out!') github
+            | .
 
         div.span3(ng-controller='ChatCtrl')
           h3 Chat

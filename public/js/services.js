@@ -6,17 +6,17 @@ angular.module('lightningthieves.services', []).
     var socket = io.connect();
     return {
       on: function(eventName, callback) {
-        socket.on(eventName, function () {
+        socket.on(eventName, function() {
           var args = arguments;
-          $rootScope.$apply(function () {
+          $rootScope.$apply(function() {
             callback.apply(socket, args);
           });
         });
       },
       emit: function(eventName, data, callback) {
-        socket.emit(eventName, data, function () {
+        socket.emit(eventName, data, function() {
           var args = arguments;
-          $rootScope.$apply(function () {
+          $rootScope.$apply(function() {
             if (callback) {
               callback.apply(socket, args);
             }

@@ -28,28 +28,28 @@ html(ng-app="lightningthieves")
           table(class='table table-bordered table-condensed centered-headings')
             thead
               tr
-                th
+                th(ng-click='convert = convertLTC')
                   | LTCLTC
                   br
                   span.sub-header Always
-                th
+                th(ng-click='convert = convertBTCeBTC')
                   | LTCBTC
                   br
                   span.sub-header BTC-e
-                th
+                th(ng-click='convert = convertBTCeUSD')
                   | LTCUSD
                   br
                   span.sub-header BTC-e
-                th
+                th(ng-click='convert = convertMtGoxUSD')
                   | BTCUSD
                   br
                   span.sub-header MtGox
             tbody
               tr
                 td 1
-                td {{ last_btce_ltcbtc | number:4 }}
-                td {{ last_btce_ltcusd | number:4 }}
-                td {{ last_mtgox_btcusd | number:4 }}
+                td {{ news.btce_ltcbtc.ticker.last | number:4 }}
+                td {{ news.btce_ltcusd.ticker.last | number:4 }}
+                td {{ news.mtgox_btcusd.data.last_local.value | number:4 }}
 
           h3 Pool Rewards
           table(class='table table-bordered table-condensed centered-headings')
@@ -69,11 +69,19 @@ html(ng-app="lightningthieves")
                   span.sub-header {{ currency }}
               tbody
                 tr
-                  td {{ confirmed_rewards | number:4 }}
-                  td {{ estimated_rewards | number:4 }}
-                  td {{ payout_history | number:4 }}
+                  td {{ convert(news.ktr.confirmed_rewards) | number:4 }}
+                  td {{ convert(news.ktr.estimated_rewards) | number:4 }}
+                  td {{ convert(news.ktr.payout_history) | number:4 }}
 
           h3 Mining
+
+          div(class='alert alert-error', ng-hide='!init || running()')
+            strong Error!
+            |  The mining rig is down!
+          div(class='alert alert-success', ng-hide='!init || !running()')
+            strong Hurray!
+            |  The mining rig is running!
+
           table(class='table table-bordered table-condensed centered-headings')
             thead
               tr
@@ -91,17 +99,17 @@ html(ng-app="lightningthieves")
                   span.sub-header Est - {{ currency }}
             tbody
               tr
-                td {{ hash_rate | number:2 }}
-                td {{ difficulty | number:2 }}
+                td {{ news.ktr.hashrate | number:2 }}
+                td {{ news.gml_api.difficulty | number:2 }}
                 td
 
           table(class='table-condensed')
             tr
-              th(ng-click='news()') Update:
+              th(ng-click='update()') Update:
               td {{ last_news_time | date: 'HH:mm:ss' }}
             tr
               th(ng-click='fetch()') Fetch:
-              td {{ last_fetch_time | date: 'HH:mm:ss' }}
+              td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
 
         div.span6
           h2 About

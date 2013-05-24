@@ -24,38 +24,53 @@ function ChatCtrl($scope, socket) {
 ChatCtrl.$inject = ['$scope', 'socket'];
 
 function FetchCtrl($scope, socket) {
-  $scope.currency = 'LTC';
+  $scope.init = false;
 
-  $scope.last_btce_ltcbtc = 0;
-  $scope.last_btce_ltcusd = 0;
-  $scope.last_mtgox_btcusd = 0;
-  $scope.confirmed_rewards = 0;
-  $scope.estimated_rewards = 0;
-  $scope.payout_history = 0;
-  $scope.hash_rate = 0;
-  $scope.difficulty = 0;
-  $scope.weekly_income = 0;
-  $scope.last_news_time = 0;
-  $scope.last_fetch_time = 0;
-
-  $scope.news = function() {
+  $scope.update = function() {
     socket.emit('news');
-  }
+  };
 
   $scope.fetch = function() {
     socket.emit('fetch');
-  }
+  };
+
+  $scope.running = function() {
+    if(!$scope.init)
+      return;
+
+    var workers = $scope.news.ktr.workers;
+    for(var w in workers)
+      if(!workers[w].alive)
+        return false;
+    return true;
+  };
+
+  $scope.convertLTC = function(p) {
+    $scope.currency = 'LTC';
+    return p;
+  };
+
+  $scope.convertBTCeBTC = function(p) {
+    $scope.currency = 'BTC';
+    return p * $scope.news.btce_ltcbtc.ticker.last;
+  };
+
+  $scope.convertBTCeUSD = function(p) {
+    $scope.currency = 'USD';
+    return p * $scope.news.btce_ltcusd.ticker.last;
+  };
+
+  $scope.convertMtGoxUSD = function(p) {
+    $scope.currency = 'USD';
+    return p * $scope.news.btce_ltcbtc.ticker.last *
+           $scope.news.mtgox_btcusd.data.last_local.value;
+  };
+
+  $scope.convert = $scope.convertLTC;
 
   socket.on('news', function(news) {
-    $scope.last_btce_ltcbtc = news.btce_ltcbtc.ticker.last;
-    $scope.last_btce_ltcusd = news.btce_ltcusd.ticker.last;
-    $scope.last_mtgox_btcusd = news.mtgox_btcusd.data.last_local.value;
-    $scope.confirmed_rewards = news.ktr.confirmed_rewards;
-    $scope.estimated_rewards = news.ktr.estimated_rewards;
-    $scope.payout_history = news.ktr.payout_history;
-    $scope.hash_rate = news.ktr.hashrate;
-    $scope.difficulty = news.gml_api.difficulty;
-    $scope.last_fetch_time = news.last_fetch_time;
+    $scope.init = true;
+    $scope.news = news;
     $scope.last_news_time = (new Date()).getTime();
   });
 

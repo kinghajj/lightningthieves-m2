@@ -25,6 +25,9 @@ ChatCtrl.$inject = ['$scope', 'socket'];
 
 function FetchCtrl($scope, socket) {
   $scope.init = false;
+  $scope.alert_type = 'info';
+  $scope.alert_head = 'Nothing.';
+  $scope.alert_mesg = 'Waiting...';
 
   $scope.update = function() {
     socket.emit('news');
@@ -34,10 +37,7 @@ function FetchCtrl($scope, socket) {
     socket.emit('fetch');
   };
 
-  $scope.running = function() {
-    if(!$scope.init)
-      return;
-
+  var running = function() {
     // check that all workers are alive
     var workers = $scope.news.ktr.workers;
     for(var w in workers)
@@ -79,6 +79,16 @@ function FetchCtrl($scope, socket) {
     $scope.weekly_income = 50 / (news.gml_api.difficulty * 1) /
                            (Math.pow(2,48)/(Math.pow(2,16)-1)) *
                            Math.pow(10,6) * 60 * 60 * 24 * 7 * (637.0/1000.0);
+
+    if(running()) {
+      $scope.alert_type = 'success';
+      $scope.alert_head = 'Hurray!';
+      $scope.alert_mesg = 'The mining rig is running!';
+    } else {
+      $scope.alert_type = 'error';
+      $scope.alert_head = 'Error!';
+      $scope.alert_mesg = 'The mining rig is down!';
+    }
   });
 
   // periodically request more news

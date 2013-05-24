@@ -43,12 +43,9 @@ div(ng-controller='FetchCtrl')
 
   h3 Mining
 
-  div(class='alert alert-error', ng-hide='!init || running()')
-    strong Error!
-    |  The mining rig is down!
-  div(class='alert alert-success', ng-hide='!init || !running()')
-    strong Hurray!
-    |  The mining rig is running!
+  div(class='alert alert-{{alert_type}}')
+    strong {{alert_head}}
+    |  {{alert_mesg}}
 
   table(class='table table-bordered table-condensed centered-headings')
     thead
@@ -68,10 +65,14 @@ div(ng-controller='FetchCtrl')
         td {{ news.gml_api.difficulty | number:2 }}
         td {{ convert(weekly_income) | number:4 }}
 
-  table(class='table-condensed')
+  table(class='table well')
     tr
-      th(ng-click='update()') Update:
+      th Update:
       td {{ last_news_time | date: 'HH:mm:ss' }}
+      td
+        a(href='#', class='btn btn-mini', ng-click='update()') Request
     tr
-      th(ng-click='fetch()') Fetch:
+      th Fetch:
       td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
+      td
+        a(href='#', class='btn btn-inverse btn-mini', ng-click='fetch()') Request

@@ -1,0 +1,113 @@
+!!!
+html(ng-app="lightningthieves")
+
+  head
+    meta(charset='utf-8')
+    title lightningthieves
+
+    script(src='/vendor/js/angular.min.js')
+    script(src='/vendor/js/bootstrap.min.js')
+    script(src='/socket.io/socket.io.js')
+
+    script(src='/js/app.js')
+    script(src='/js/services.js')
+    script(src='/js/controllers.js')
+
+    link(rel='stylesheet', href='/vendor/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/vendor/css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+
+    div.container
+      h1 lightningthieves Mining Status Center
+
+      div.row
+        div.span3(ng-controller='FetchCtrl')
+          h3 Exchange Rates
+          table(class='table table-bordered table-condensed')
+            thead
+              tr
+                th
+                  | LTCLTC
+                  br
+                  span.sub-header Always
+                th
+                  | LTCBTC
+                  br
+                  span.sub-header BTC-e
+                th
+                  | LTCUSD
+                  br
+                  span.sub-header BTC-e
+                th
+                  | BTCUSD
+                  br
+                  span.sub-header MtGox
+            tbody
+              tr
+                td 1
+                td {{ last_btce_ltcbtc | number:4 }}
+                td {{ last_btce_ltcusd | number:4 }}
+                td {{ last_mtgox_btcusd | number:4 }}
+
+          h3 Pool Rewards
+          table(class='table table-bordered table-condensed')
+            thead
+              tr
+                th
+                  | Confirmed Rewards
+                  br
+                  span.sub-header {{ currency }}
+                th
+                  | Estimated Rewards
+                  br
+                  span.sub-header {{ currency }}
+                th
+                  | Payout History
+                  br
+                  span.sub-header {{ currency }}
+              tbody
+                tr
+                  td {{ confirmed_rewards | number:4 }}
+                  td {{ estimated_rewards | number:4 }}
+                  td {{ payout_history | number:4 }}
+
+          h3 Mining
+          table(class='table table-bordered table-condensed')
+            thead
+              tr
+                th
+                  | Hash Rate
+                  br
+                  span.sub-header Est - kh/s
+                th
+                  | Difficulty
+                  br
+                  &nbsp;
+                th
+                  | Weekly Income
+                  br
+                  span.sub-header Est - {{ currency }}
+            tbody
+              tr
+                td {{ hash_rate | number:2 }}
+                td {{ difficulty | number:2 }}
+                td
+
+        div.span6
+          h2 About
+          p Blah blah blah.
+
+          h2 Details
+          p Lorem ipsum...
+
+        div.span3(ng-controller='ChatCtrl')
+          h3 Chat
+          form(ng-submit='chat()')
+            input(type='text', ng-model='msg', placeholder='Have something to say?')
+          ul.unstyled
+            li(ng-repeat='line in chat_lines')
+              p
+                strong {{ line.sender }}
+                | : {{ line.msg }}

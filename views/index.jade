@@ -181,12 +181,23 @@ html(ng-app="lightningthieves")
               title='Would you prefer hg? Get out!') github
             | .
 
-        div.span3(ng-controller='ChatCtrl')
-          h3 Chat
-          form(ng-submit='chat()')
-            input(type='text', ng-model='msg', placeholder='Have something to say?')
-          ul.unstyled
-            li(ng-repeat='line in chat_lines')
-              p
-                strong {{ line.sender }}
-                | : {{ line.msg }}
+        div.span3
+          div(ng-controller='ConnCtrl')
+            h3 Connection Status
+            div(class='alert alert-error', ng-show='init && conn_err()')
+              strong Error!
+              |  The connection could not be established.
+            div(class='alert alert-success', ng-show='init && connected()')
+              strong Connected.
+              |  The page should function normally.
+            ng-pluralize(count='connection_count', when='connection_when')
+
+          div(ng-controller='ChatCtrl')
+            h3 Chat
+            form(ng-submit='chat()')
+              input(type='text', ng-model='msg', placeholder='Have something to say?')
+            ul.unstyled
+              li(ng-repeat='line in chat_lines')
+                p
+                  strong {{ line.sender }}
+                  | : {{ line.msg }}

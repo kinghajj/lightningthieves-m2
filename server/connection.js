@@ -14,7 +14,8 @@ function Connection(sockets) {
       self.connection_count--;
     });
     socket.on('connection_count', function() {
-      socket.emit('connection_count', { connection_count: connection_count });
+      socket.emit('connection_count',
+                  { connection_count: self.connection_count });
     });
     // call initializers so they can add listeners
     for(var i = 0; i < self.initializers.length; i++) {

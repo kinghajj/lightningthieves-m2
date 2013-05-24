@@ -83,3 +83,30 @@ function FetchCtrl($scope, socket) {
   socket.emit('news');
 }
 FetchCtrl.$inject = ['$scope', 'socket'];
+
+function ConnCtrl($scope, socket) {
+  $scope.init = false;
+  $scope.connection_count = 0;
+  $scope.connection_when = {'0': 'Nobody is connected. How do you see this...?',
+                            '1': "You're the only one here. Congratulations.",
+                            'other': 'There are {} connections.'};
+
+  $scope.connected = function() {
+    return socket.connected();
+  }
+
+  $scope.conn_err = function() {
+    return socket.conn_err();
+  }
+
+  socket.on('connection_count', function(pack) {
+    $scope.init = true;
+    $scope.connection_count = pack.connection_count;
+  });
+
+  setInterval(function() {
+    socket.emit('connection_count');
+  }, 60000);
+  socket.emit('connection_count');
+}
+ConnCtrl.$inject = ['$scope', 'socket'];

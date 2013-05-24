@@ -1,5 +1,6 @@
 var sanitize = require('validator').sanitize;
 
+/* Manages basic chat functionality. */
 function Chat() {
   this.initialize = function(conn, socket) {
     socket.on('chat', function(pack) {

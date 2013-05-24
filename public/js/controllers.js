@@ -38,12 +38,15 @@ function FetchCtrl($scope, socket) {
     if(!$scope.init)
       return;
 
+    // check that all workers are alive
     var workers = $scope.news.ktr.workers;
     for(var w in workers)
       if(!workers[w].alive)
         return false;
     return true;
   };
+
+  // various LTC currency conversions
 
   $scope.convertLTC = function(p) {
     $scope.currency = 'LTC';
@@ -68,6 +71,7 @@ function FetchCtrl($scope, socket) {
 
   $scope.convert = $scope.convertLTC;
 
+  // wait for news, update the model
   socket.on('news', function(news) {
     $scope.init = true;
     $scope.news = news;
@@ -77,6 +81,7 @@ function FetchCtrl($scope, socket) {
                            Math.pow(10,6) * 60 * 60 * 24 * 7 * (637.0/1000.0);
   });
 
+  // periodically request more news
   setInterval(function() {
     socket.emit('news');
   }, 60000);
@@ -99,11 +104,13 @@ function ConnCtrl($scope, socket) {
     return socket.conn_err();
   }
 
+  // wait for news, update the model
   socket.on('connection_count', function(pack) {
     $scope.init = true;
     $scope.connection_count = pack.connection_count;
   });
 
+  // periodically request more news
   setInterval(function() {
     socket.emit('connection_count');
   }, 60000);

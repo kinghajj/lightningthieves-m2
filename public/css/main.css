@@ -13,3 +13,7 @@ h1 {
 p.chat-line {
   margin-bottom: 0;
 }
+
+.centered {
+  text-align: center !important;
+}

@@ -1,18 +1,30 @@
 div(ng-controller='FetchCtrl')
+  table(class='table well')
+    tr
+      th Update:
+      td {{ last_news_time | date: 'HH:mm:ss' }}
+      td
+        a(href='#', class='btn btn-mini', ng-click='update()') Request
+    tr
+      th Fetch:
+      td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
+      td
+        a(href='#', class='btn btn-inverse btn-mini', ng-click='fetch()') Request
+
   h3 Exchange Rates
   table(class='table table-bordered table-condensed centered-headings')
     thead
       tr
-        th(ng-click='convert = convertLTC') LTCLTC
+        th LTCLTC
           br
           span.sub-header Always
-        th(ng-click='convert = convertBTCeBTC') LTCBTC
+        th LTCBTC
           br
           span.sub-header BTC-e
-        th(ng-click='convert = convertBTCeUSD') LTCUSD
+        th LTCUSD
           br
           span.sub-header BTC-e
-        th(ng-click='convert = convertMtGoxUSD') BTCUSD
+        th BTCUSD
           br
           span.sub-header MtGox
     tbody
@@ -21,6 +33,19 @@ div(ng-controller='FetchCtrl')
         td {{ news.btce_ltcbtc.ticker.last | number:4 }}
         td {{ news.btce_ltcusd.ticker.last | number:4 }}
         td {{ news.mtgox_btcusd.data.last_local.value | number:4 }}
+      tr
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click='convert = convertLTC') Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click='convert = convertBTCeBTC') Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click='convert = convertBTCeUSD') Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click='convert = convertMtGoxUSD') Use
 
   h3 Pool Rewards
   table(class='table table-bordered table-condensed centered-headings')
@@ -64,15 +89,3 @@ div(ng-controller='FetchCtrl')
         td {{ news.ktr.hashrate | number:2 }}
         td {{ news.gml_api.difficulty | number:2 }}
         td {{ convert(weekly_income) | number:4 }}
-
-  table(class='table well')
-    tr
-      th Update:
-      td {{ last_news_time | date: 'HH:mm:ss' }}
-      td
-        a(href='#', class='btn btn-mini', ng-click='update()') Request
-    tr
-      th Fetch:
-      td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
-      td
-        a(href='#', class='btn btn-inverse btn-mini', ng-click='fetch()') Request

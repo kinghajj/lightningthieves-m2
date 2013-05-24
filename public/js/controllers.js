@@ -2,6 +2,7 @@
 
 function ChatCtrl($scope, socket) {
   $scope.chat_lines = [];
+  $scope.nick_status = 'question-sign';
 
   // listen for incoming messages
   socket.on('chat', function(pack) {
@@ -12,6 +13,12 @@ function ChatCtrl($scope, socket) {
       $scope.chat_lines.shift();
     }
   });
+  socket.on('nick-taken', function() {
+    $scope.nick_status = 'exclamation-sign';
+  });
+  socket.on('nick-free', function() {
+    $scope.nick_status = 'ok';
+  });
 
   // broadcast a message
   $scope.chat = function() {
@@ -19,6 +26,13 @@ function ChatCtrl($scope, socket) {
     socket.emit('chat', { msg: $scope.msg });
     // clear the chat input
     $scope.msg = '';
+  };
+  $scope.change = function() {
+    socket.emit('check', { nick: $scope.nick });
+  };
+  $scope.register = function() {
+    socket.emit('register', { nick: $scope.nick });
+    $scope.nick = '';
   };
 }
 ChatCtrl.$inject = ['$scope', 'socket'];

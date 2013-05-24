@@ -1,0 +1,18 @@
+!!!
+html(ng-app="lightningthieves")
+  head
+    meta(charset='utf-8')
+    block head
+      title Default Title
+    block scripts
+      script(src='/vendor/js/angular.min.js')
+      script(src='/vendor/js/bootstrap.min.js')
+      script(src='/socket.io/socket.io.js')
+      script(src='/js/app.js')
+      script(src='/js/services.js')
+    block stylesheets
+      link(rel='stylesheet', href='/vendor/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/vendor/css/bootstrap-responsive.min.css')
+  body
+    div.container
+      block content

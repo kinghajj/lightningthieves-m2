@@ -20,7 +20,6 @@ app.configure(function() {
 });
 
 // Configure deployment settings
-
 app.configure('development', function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
@@ -30,7 +29,6 @@ app.configure('production', function() {
 });
 
 // Configure the routes
-
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
 app.get('*', routes.index);

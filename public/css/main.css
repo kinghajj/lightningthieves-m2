@@ -9,3 +9,7 @@ table.centered-headings th {
 h1 {
   text-align: center;
 }
+
+p.chat-line {
+  margin-bottom: 0;
+}

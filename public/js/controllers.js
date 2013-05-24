@@ -72,6 +72,9 @@ function FetchCtrl($scope, socket) {
     $scope.init = true;
     $scope.news = news;
     $scope.last_news_time = (new Date()).getTime();
+    $scope.weekly_income = 50 / (news.gml_api.difficulty * 1) /
+                           (Math.pow(2,48)/(Math.pow(2,16)-1)) *
+                           Math.pow(10,6) * 60 * 60 * 24 * 7 * (637.0/1000.0);
   });
 
   setInterval(function() {

@@ -101,7 +101,7 @@ html(ng-app="lightningthieves")
               tr
                 td {{ news.ktr.hashrate | number:2 }}
                 td {{ news.gml_api.difficulty | number:2 }}
-                td
+                td {{ convert(weekly_income) | number:4 }}
 
           table(class='table-condensed')
             tr

@@ -1,9 +1,6 @@
 div(ng-controller='ConnCtrl')
   h3 Connection Status
-  div(class='alert alert-error', ng-show='init && conn_err()')
-    strong Error!
-    |  The connection could not be established.
-  div(class='alert alert-success', ng-show='init && connected()')
-    strong Connected.
-    |  The page should function normally.
+  div(class='alert alert-{{alert_type}}')
+    strong {{alert_head}}
+    |  {{alert_mesg}}
   ng-pluralize(count='connection_count', when='connection_when')

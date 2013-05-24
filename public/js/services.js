@@ -24,17 +24,7 @@ angular.module('lightningthieves.services', []).
           });
         })
       },
-      connected: false,
-      conn_err: false
     };
-
-    socket.on('connect', function() {
-      wrapper.connected = true;
-    });
-    socket.on('error', function() {
-      wrapper.conn_err = true;
-      wrapper.connected = false;
-    });
 
     return wrapper;
   });

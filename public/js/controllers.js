@@ -95,14 +95,46 @@ function ConnCtrl($scope, socket) {
   $scope.connection_when = {'0': 'Nobody is connected. How do you see this...?',
                             '1': "You're the only one here. Congratulations.",
                             'other': 'There are {} connections.'};
+  $scope.alert_type = 'info';
+  $scope.alert_head = 'Starting.'
+  $scope.alert_head = 'Wait for it...';
 
-  $scope.connected = function() {
-    return socket.connected;
-  }
-
-  $scope.conn_err = function() {
-    return socket.conn_err;
-  }
+  // wait on various socket events and update model appropriately
+  socket.on('connect', function() {
+    $scope.alert_type = 'success';
+    $scope.alert_head = 'Connected!'
+    $scope.alert_mesg = 'The site should function normally.'
+  });
+  socket.on('connecting', function() {
+    $scope.alert_type = 'info';
+    $scope.alert_head = 'Connecting...'
+    $scope.alert_mesg = 'Hang on.'
+  });
+  socket.on('disconnect', function() {
+    $scope.alert_type = 'error';
+    $scope.alert_head = 'Disconnected.'
+    $scope.alert_mesg = 'So long.'
+  });
+  socket.on('connect_failed', function() {
+    $scope.alert_type = 'error';
+    $scope.alert_head = 'Connection failed.'
+    $scope.alert_mesg = 'See the sysadmin.'
+  });
+  socket.on('error', function() {
+    $scope.alert_type = 'error';
+    $scope.alert_head = 'Error.';
+    $scope.alert_mesg = "That's all I know.";
+  });
+  socket.on('reconnect_failed', function() {
+    $scope.alert_type = 'error';
+    $scope.alert_head = 'Reconnect failed..';
+    $scope.alert_mesg = "Damn it.";
+  });
+  socket.on('reconnecting', function() {
+    $scope.alert_type = 'info';
+    $scope.alert_head = 'Reconnecting.';
+    $scope.alert_mesg = "One more time.";
+  });
 
   // wait for news, update the model
   socket.on('connection_count', function(pack) {

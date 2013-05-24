@@ -35,6 +35,16 @@ function FetchCtrl($scope, socket) {
   $scope.hash_rate = 0;
   $scope.difficulty = 0;
   $scope.weekly_income = 0;
+  $scope.last_news_time = 0;
+  $scope.last_fetch_time = 0;
+
+  $scope.news = function() {
+    socket.emit('news');
+  }
+
+  $scope.fetch = function() {
+    socket.emit('fetch');
+  }
 
   socket.on('news', function(news) {
     $scope.last_btce_ltcbtc = news.btce_ltcbtc.ticker.last;
@@ -45,6 +55,8 @@ function FetchCtrl($scope, socket) {
     $scope.payout_history = news.ktr.payout_history;
     $scope.hash_rate = news.ktr.hashrate;
     $scope.difficulty = news.gml_api.difficulty;
+    $scope.last_fetch_time = news.last_fetch_time;
+    $scope.last_news_time = (new Date()).getTime();
   });
 
   setInterval(function() {

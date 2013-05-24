@@ -25,7 +25,7 @@ html(ng-app="lightningthieves")
       div.row
         div.span3(ng-controller='FetchCtrl')
           h3 Exchange Rates
-          table(class='table table-bordered table-condensed')
+          table(class='table table-bordered table-condensed centered-headings')
             thead
               tr
                 th
@@ -52,7 +52,7 @@ html(ng-app="lightningthieves")
                 td {{ last_mtgox_btcusd | number:4 }}
 
           h3 Pool Rewards
-          table(class='table table-bordered table-condensed')
+          table(class='table table-bordered table-condensed centered-headings')
             thead
               tr
                 th
@@ -74,7 +74,7 @@ html(ng-app="lightningthieves")
                   td {{ payout_history | number:4 }}
 
           h3 Mining
-          table(class='table table-bordered table-condensed')
+          table(class='table table-bordered table-condensed centered-headings')
             thead
               tr
                 th
@@ -94,6 +94,14 @@ html(ng-app="lightningthieves")
                 td {{ hash_rate | number:2 }}
                 td {{ difficulty | number:2 }}
                 td
+
+          table(class='table-condensed')
+            tr
+              th(ng-click='news()') Update:
+              td {{ last_news_time | date: 'HH:mm:ss' }}
+            tr
+              th(ng-click='fetch()') Fetch:
+              td {{ last_fetch_time | date: 'HH:mm:ss' }}
 
         div.span6
           h2 About

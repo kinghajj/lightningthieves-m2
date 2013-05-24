@@ -2,8 +2,8 @@
   font-size: xx-small;
 }
 
-th {
-  text-align: center !important;
+table.centered-headings th {
+  text-align: center;
 }
 
 h1 {

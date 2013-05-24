@@ -81,7 +81,9 @@ function Fetch() {
     // or ask for a fetch
     socket.on('fetch', function() {
       self.fetch();
-      self.news(socket);
+      setTimeout(function() {
+        self.news(socket);
+      }, 1000);
     });
   };
 

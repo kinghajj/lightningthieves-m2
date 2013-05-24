@@ -3,16 +3,9 @@
 angular.module('lightningthieves.services', []).
   value('version', '0.1').
   factory('socket', function($rootScope) {
-    var connected = false, conn_err = false;
     var socket = io.connect();
-    socket.on('connect', function() {
-      connected = true;
-    });
-    socket.on('error', function() {
-      conn_err = true;
-      connected = false;
-    });
-    return {
+
+    var wrapper = {
       on: function(eventName, callback) {
         socket.on(eventName, function() {
           var args = arguments;
@@ -31,11 +24,17 @@ angular.module('lightningthieves.services', []).
           });
         })
       },
-      connected: function() {
-        return connected;
-      },
-      conn_err: function() {
-        return conn_err;
-      }
+      connected: false,
+      conn_err: false
     };
+
+    socket.on('connect', function() {
+      wrapper.connected = true;
+    });
+    socket.on('error', function() {
+      wrapper.conn_err = true;
+      wrapper.connected = false;
+    });
+
+    return wrapper;
   });

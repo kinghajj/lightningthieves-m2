@@ -97,11 +97,11 @@ function ConnCtrl($scope, socket) {
                             'other': 'There are {} connections.'};
 
   $scope.connected = function() {
-    return socket.connected();
+    return socket.connected;
   }
 
   $scope.conn_err = function() {
-    return socket.conn_err();
+    return socket.conn_err;
   }
 
   // wait for news, update the model

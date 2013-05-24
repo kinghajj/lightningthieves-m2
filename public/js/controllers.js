@@ -37,19 +37,12 @@ function ChatCtrl($scope, socket) {
 }
 ChatCtrl.$inject = ['$scope', 'socket'];
 
-function FetchCtrl($scope, socket) {
+function FetchCtrl($scope, updates) {
   $scope.init = false;
+  $scope.updates = updates;
   $scope.alert_type = 'info';
   $scope.alert_head = 'Nothing.';
   $scope.alert_mesg = 'Waiting...';
-
-  $scope.update = function() {
-    socket.emit('news');
-  };
-
-  $scope.fetch = function() {
-    socket.emit('fetch');
-  };
 
   var running = function() {
     // check that all workers are alive
@@ -86,7 +79,7 @@ function FetchCtrl($scope, socket) {
   $scope.convert = $scope.convertLTC;
 
   // wait for news, update the model
-  socket.on('news', function(news) {
+  updates.on(function(news) {
     $scope.init = true;
     $scope.news = news;
     $scope.last_news_time = (new Date()).getTime();
@@ -104,14 +97,8 @@ function FetchCtrl($scope, socket) {
       $scope.alert_mesg = 'The mining rig is down!';
     }
   });
-
-  // periodically request more news
-  setInterval(function() {
-    socket.emit('news');
-  }, 60000);
-  socket.emit('news');
 }
-FetchCtrl.$inject = ['$scope', 'socket'];
+FetchCtrl.$inject = ['$scope', 'updates'];
 
 function ConnCtrl($scope, socket) {
   $scope.init = false;

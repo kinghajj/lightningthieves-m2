@@ -4,12 +4,12 @@ div(ng-controller='FetchCtrl')
       th Update:
       td {{ last_news_time | date: 'HH:mm:ss' }}
       td
-        a(href='#', class='btn btn-mini', ng-click='update()') Request
+        a(href='#', class='btn btn-mini', ng-click='updates.update()') Request
     tr
       th Fetch:
       td {{ news.last_fetch_time | date: 'HH:mm:ss' }}
       td
-        a(href='#', class='btn btn-inverse btn-mini', ng-click='fetch()') Request
+        a(href='#', class='btn btn-inverse btn-mini', ng-click='updates.fetch()') Request
 
   h3 Exchange Rates
   table(class='table table-bordered table-condensed centered-headings')

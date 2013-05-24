@@ -27,4 +27,26 @@ angular.module('lightningthieves.services', []).
     };
 
     return wrapper;
-  });
+  }).
+  factory('updates', ['$rootScope', 'socket', function($rootScope, socket) {
+    var wrapper = {
+      on: function(callback) {
+        socket.on('news', function(news) {
+          callback(news);
+        });
+      },
+      update: function() {
+        socket.emit('news');
+      },
+      fetch: function() {
+        socket.emit('fetch');
+      }
+    };
+
+    wrapper.update();
+    setInterval(function() {
+      wrapper.update();
+    }, 60000);
+
+    return wrapper;
+  }]);

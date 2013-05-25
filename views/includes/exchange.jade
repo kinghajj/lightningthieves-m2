@@ -1,0 +1,36 @@
+div(ng-controller='ExchangeCtrl')
+  h3 Exchange Rates
+  table(class='table table-bordered table-condensed centered-headings')
+    thead
+      tr
+        th LTCLTC
+          br
+          span.sub-header Always
+        th LTCBTC
+          br
+          span.sub-header BTC-e
+        th LTCUSD
+          br
+          span.sub-header BTC-e
+        th BTCUSD
+          br
+          span.sub-header MtGox
+    tbody
+      tr
+        td 1
+        td {{ btce_ltcbtc | number:4 }}
+        td {{ btce_ltcusd | number:4 }}
+        td {{ mtgox_btcusd | number:4 }}
+      tr
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click="conversion.convertLTC()") Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click="conversion.convertBTCeBTC()") Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click="conversion.convertBTCeUSD()") Use
+        td.centered
+          a(href='#', class='btn btn-primary btn-mini',
+            ng-click="conversion.convertMtGoxUSD()") Use

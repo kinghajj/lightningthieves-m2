@@ -2,8 +2,6 @@ var spawn = require('child_process').spawn;
 
 // wait self long between fetches
 var server_fetch_delay = 60000 * 5;
-// don't fetch more often than self
-var server_fetch_min_delay = 60000;
 
 function curl(url) {
   return spawn('curl', [url]);
@@ -14,7 +12,7 @@ function err_handler(err) {
 }
 
 /* Manage fetching and delivering data from JSON APIs. */
-function Fetch() {
+function Fetch(conn) {
   var self = this;
 
   self.tracked_jsons = [
@@ -42,12 +40,7 @@ function Fetch() {
   self.last_fetch_time = undefined;
 
   // fetch from sources and update local copies
-  self.fetch = function(force) {
-    // don't fetch too often, unless self is part of the main fetch loop.
-    if(!force && self.last_fetch_time && (new Date()).getTime() - self.last_fetch_time < server_fetch_min_delay) {
-      return;
-    }
-
+  self.fetch = function() {
     for(var i in self.tracked_jsons) {
       var fetch = curl(self.tracked_jsons[i].url);
       fetch.on('error', err_handler);
@@ -62,34 +55,27 @@ function Fetch() {
   };
 
   // emit latest data
-  self.news = function(socket) {
+  self.news = function(conn) {
     var bundle = { last_fetch_time: self.last_fetch_time };
     for(var i in self.tracked_jsons) {
       if(self.tracked_jsons[i].last) {
         bundle[self.tracked_jsons[i].name] = self.tracked_jsons[i].last;
       }
     }
-    socket.emit('news', bundle);
+    conn.sockets.emit('news', bundle);
   };
 
-  // initialize fetch functionality on the socket
+  // initialize functionality on the socket
   self.initialize = function(conn, socket) {
-    // you can ask for news
-    socket.on('news', function() {
-      self.news(socket);
-    });
-    // or ask for a fetch
-    socket.on('fetch', function() {
-      self.fetch();
-      setTimeout(function() {
-        self.news(socket);
-      }, 1000);
-    });
+    self.news(conn);
   };
 
-  // peridoically fetch again
-  setInterval(self.fetch, server_fetch_delay, true);
-  self.fetch(true);
+  self.fetch();
+  setTimeout(self.news, 1000, conn);
+  setInterval(function() {
+    self.fetch();
+    setTimeout(self.news, 1000, conn);
+  }, server_fetch_delay);
 }
 
 module.exports = Fetch;

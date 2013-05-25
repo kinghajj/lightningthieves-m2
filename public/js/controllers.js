@@ -37,57 +37,67 @@ function ChatCtrl($scope, socket) {
 }
 ChatCtrl.$inject = ['$scope', 'socket'];
 
-function FetchCtrl($scope, updates) {
-  $scope.init = false;
-  $scope.updates = updates;
+function ExchangeCtrl($scope, states, conversion) {
+  $scope.conversion = conversion;
+
+  states.on('convert', function(convert) {
+    $scope.convert = convert;
+  });
+  states.on('currency', function(currency) {
+    $scope.currency = currency;
+  });
+  states.on('news', function(news) {
+    $scope.btce_ltcbtc = news.btce_ltcbtc.ticker.last;
+    $scope.btce_ltcusd = news.btce_ltcusd.ticker.last;
+    $scope.mtgox_btcusd = news.mtgox_btcusd.data.last_local.value;
+  });
+
+  conversion.convertLTC();
+}
+
+ExchangeCtrl.$inject = ['$scope', 'states', 'conversion'];
+
+function RewardCtrl($scope, states) {
+  $scope.convert = states.get('convert');
+  $scope.currency = states.get('currency');
+  states.on('convert', function(convert) {
+    $scope.convert = convert;
+  });
+  states.on('currency', function(currency) {
+    $scope.currency = currency;
+  });
+  states.on('news', function(news) {
+    $scope.confirmed_rewards = news.ktr.confirmed_rewards;
+    $scope.estimated_rewards = news.ktr.estimated_rewards;
+    $scope.payout_history = news.ktr.payout_history;
+  });
+}
+RewardCtrl.$inject = ['$scope', 'states'];
+
+function MiningCtrl($scope, states) {
+  $scope.convert = states.get('convert');
   $scope.alert_type = 'info';
   $scope.alert_head = 'Nothing.';
   $scope.alert_mesg = 'Waiting...';
 
-  var running = function() {
-    // check that all workers are alive
-    var workers = $scope.news.ktr.workers;
-    for(var w in workers)
-      if(!workers[w].alive)
-        return false;
-    return true;
-  };
-
-  // various LTC currency conversions
-
-  $scope.convertLTC = function(p) {
-    $scope.currency = 'LTC';
-    return p;
-  };
-
-  $scope.convertBTCeBTC = function(p) {
-    $scope.currency = 'BTC';
-    return p * $scope.news.btce_ltcbtc.ticker.last;
-  };
-
-  $scope.convertBTCeUSD = function(p) {
-    $scope.currency = 'USD';
-    return p * $scope.news.btce_ltcusd.ticker.last;
-  };
-
-  $scope.convertMtGoxUSD = function(p) {
-    $scope.currency = 'USD';
-    return p * $scope.news.btce_ltcbtc.ticker.last *
-           $scope.news.mtgox_btcusd.data.last_local.value;
-  };
-
-  $scope.convert = $scope.convertLTC;
-
-  // wait for news, update the model
-  updates.on(function(news) {
-    $scope.init = true;
-    $scope.news = news;
-    $scope.last_news_time = (new Date()).getTime();
-    $scope.weekly_income = 50 / (news.gml_api.difficulty * 1) /
+  states.on('convert', function(convert) {
+    $scope.convert = convert;
+  });
+  states.on('news', function(news) {
+    $scope.hash_rate = news.ktr.hashrate;
+    $scope.difficulty = news.gml_api.difficulty;
+    $scope.weekly_income = 50 / ($scope.difficulty * 1) /
                            (Math.pow(2,48)/(Math.pow(2,16)-1)) *
                            Math.pow(10,6) * 60 * 60 * 24 * 7 * (637.0/1000.0);
 
-    if(running()) {
+    var running = true;
+    for(var w in news.ktr.workers) {
+      if(!news.ktr.workers[w].alive) {
+        running = false;
+        break;
+      }
+    }
+    if(running) {
       $scope.alert_type = 'success';
       $scope.alert_head = 'Hurray!';
       $scope.alert_mesg = 'The mining rig is running!';
@@ -98,7 +108,15 @@ function FetchCtrl($scope, updates) {
     }
   });
 }
-FetchCtrl.$inject = ['$scope', 'updates'];
+MiningCtrl.$inject = ['$scope', 'states'];
+
+function UpdateCtrl($scope, updates) {
+  updates.on(function(news) {
+    $scope.last_news_time = (new Date()).getTime();
+    $scope.last_fetch_time = news.last_fetch_time;
+  });
+}
+UpdateCtrl.$inject = ['$scope', 'updates'];
 
 function ConnCtrl($scope, socket) {
   $scope.init = false;

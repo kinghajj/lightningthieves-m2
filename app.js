@@ -34,7 +34,9 @@ app.get('/partials/:name', routes.partials);
 app.get('*', routes.index);
 
 // Start the connection controllers
-var conn = new connection(io.sockets, fetch, chat);
+var conn = new connection(io.sockets, new chat());
+conn.addInitializers([new fetch(conn)]);
+
 io.sockets.on('connection', conn.handler);
 
 // Start listening

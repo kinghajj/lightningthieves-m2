@@ -25,8 +25,8 @@ function Connection(sockets) {
 
   /* Add initializers to run on subsequent connections. */
   self.addInitializers = function(initializers) {
-    for(var i in initializers) {
-      self.initializers.push(new initializers[i]());
+    for(var i = 0; i < initializers.length; i++) {
+      self.initializers.push(initializers[i]);
     }
   };
 

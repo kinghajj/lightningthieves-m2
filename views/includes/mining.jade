@@ -1,0 +1,24 @@
+div(ng-controller='MiningCtrl')
+  h3 Mining
+
+  div(class='alert alert-{{alert_type}}')
+    strong {{alert_head}}
+    |  {{alert_mesg}}
+
+  table(class='table table-bordered table-condensed centered-headings')
+    thead
+      tr
+        th Hash Rate
+          br
+          span.sub-header Est - kh/s
+        th Difficulty
+          br
+          &nbsp;
+        th Weekly Income
+          br
+          span.sub-header Est - {{ currency }}
+    tbody
+      tr
+        td {{ hash_rate | number:2 }}
+        td {{ difficulty | number:2 }}
+        td {{ convert(weekly_income) | number:4 }}

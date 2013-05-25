@@ -1,0 +1,19 @@
+div(ng-controller='RewardCtrl')
+  h3 Pool Rewards
+  table(class='table table-bordered table-condensed centered-headings')
+    thead
+      tr
+        th Confirmed Rewards
+          br
+          span.sub-header {{ currency }}
+        th Estimated Rewards
+          br
+          span.sub-header {{ currency }}
+        th Payout History
+          br
+          span.sub-header {{ currency }}
+      tbody
+        tr
+          td {{ convert(confirmed_rewards) | number:4 }}
+          td {{ convert(estimated_rewards) | number:4 }}
+          td {{ convert(payout_history) | number:4 }}

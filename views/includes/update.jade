@@ -1,0 +1,8 @@
+div(ng-controller='UpdateCtrl')
+  table(class='table well')
+    tr
+      th Update:
+      td {{ last_news_time | date: 'HH:mm:ss' }}
+    tr
+      th Fetch:
+      td {{ last_fetch_time | date: 'HH:mm:ss' }}

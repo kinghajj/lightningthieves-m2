@@ -10,23 +10,48 @@ function Chat() {
   };
 
   function find_sender(sender) {
-    console.log(self.registered);
     for(var i = 0; i < self.registered.length; i++) {
       if(self.registered[i].sender == sender) {
-        console.log('found sender ' + sender);
         return i;
       }
     }
   }
 
   function find_nick(nick) {
-    console.log(self.registered);
     for(var i = 0; i < self.registered.length; i++) {
       if(self.registered[i].nick == nick) {
-        console.log('found nick ' + nick);
         return i;
       }
     }
+  }
+
+  function nick_available(nick) {
+    return nick_valid(nick) && find_nick(nick) === undefined;
+  }
+
+  function nick_valid(nick) {
+    return nick && nick.match(/^[0-9a-zA-Z]+$/) !== null
+  }
+
+  function reg_nick(nick, socket) {
+    if(!nick_available(nick))
+      return;
+    var sender = calc_sender(socket);
+    var found = find_sender(sender);
+    console.log('registering ' + nick + ' to ' + sender);
+    if(found !== undefined) {
+      self.registered[found].nick = nick;
+    } else {
+      self.registered.push({ sender: sender, nick: nick });
+    }
+  }
+
+  function calc_name(socket) {
+    var sender = calc_sender(socket);
+    var found = find_sender(sender);
+    console.log(found);
+    console.log(self.registered[found].nick);
+    return found !== undefined ? self.registered[found].nick : sender;
   }
 
   self.initialize = function(conn, socket) {
@@ -36,37 +61,16 @@ function Chat() {
         self.registered.splice(found, 1);
     });
     socket.on('chat', function(pack) {
-      var sender = calc_sender(socket);
-      var msg    = sanitize(pack.msg).escape();
-      var found  = find_sender(sender);
-      if(found !== undefined) {
-        sender = self.registered[found].nick;
-      }
-      conn.sockets.emit('chat', { sender: sender, msg: msg });
+      var name = calc_name(socket), msg = sanitize(pack.msg).escape();
+      console.log('delivering message from ' + name + ': ' + msg);
+      conn.sockets.emit('chat', { name: name, msg: msg });
     });
-    socket.on('check', function(pack) {
-      var found = find_nick(pack.nick);
-      if(found !== undefined) {
-        socket.emit('nick-taken', pack);
-      } else {
-        socket.emit('nick-free', pack);
-      }
+    socket.on('nick-chk', function(pack) {
+      var avail = nick_available(pack.nick);
+      socket.emit(avail ? 'nick-avail' : 'nick-invalid', pack);
     });
-    socket.on('register', function(pack) {
-      var found = find_nick(pack.nick);
-      if(!found) {
-        var sender = calc_sender(socket);
-        console.log(sender);
-        var found2 = find_sender(sender);
-        console.log('found2 = ' + found2);
-        if(found2 !== undefined) {
-          console.log('changing nick');
-          self.registered[found2].nick = pack.nick;
-        } else {
-          console.log('registering nick');
-          self.registered.push({ sender: sender, nick: pack.nick });
-        }
-      }
+    socket.on('nick-reg', function(pack) {
+      reg_nick(pack.nick, socket);
     });
   };
 }

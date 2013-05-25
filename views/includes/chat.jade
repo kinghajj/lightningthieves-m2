@@ -11,5 +11,5 @@ div(ng-controller='ChatCtrl')
   ul.unstyled
     li(ng-repeat='line in chat_lines')
       p.chat-line
-        strong {{ line.sender }}
+        strong {{ line.name }}
         | : {{ line.msg }}

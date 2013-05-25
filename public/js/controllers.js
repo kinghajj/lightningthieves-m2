@@ -13,10 +13,10 @@ function ChatCtrl($scope, socket) {
       $scope.chat_lines.shift();
     }
   });
-  socket.on('nick-taken', function() {
+  socket.on('nick-invalid', function() {
     $scope.nick_status = 'exclamation-sign';
   });
-  socket.on('nick-free', function() {
+  socket.on('nick-avail', function() {
     $scope.nick_status = 'ok';
   });
 
@@ -28,10 +28,10 @@ function ChatCtrl($scope, socket) {
     $scope.msg = '';
   };
   $scope.change = function() {
-    socket.emit('check', { nick: $scope.nick });
+    socket.emit('nick-chk', { nick: $scope.nick });
   };
   $scope.register = function() {
-    socket.emit('register', { nick: $scope.nick });
+    socket.emit('nick-reg', { nick: $scope.nick });
     $scope.nick = '';
   };
 }

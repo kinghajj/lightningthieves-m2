@@ -2,7 +2,13 @@
 
 function ChatCtrl($scope, socket) {
   $scope.chat_lines = [];
-  $scope.nick_status = 'question-sign';
+
+  function alert_reset() {
+    $scope.alert_type = 'info';
+    $scope.alert_head = 'Waiting.'
+    $scope.alert_mesg = 'Type and find if a nick is taken.'
+  }
+  alert_reset();
 
   // listen for incoming messages
   socket.on('chat', function(pack) {
@@ -14,10 +20,19 @@ function ChatCtrl($scope, socket) {
     }
   });
   socket.on('nick-invalid', function() {
-    $scope.nick_status = 'exclamation-sign';
+    $scope.alert_type = 'error';
+    $scope.alert_head = 'Error!';
+    $scope.alert_mesg = 'That nick is taken or invalid.';
   });
   socket.on('nick-avail', function() {
-    $scope.nick_status = 'ok';
+    $scope.alert_type = 'success';
+    $scope.alert_head = 'OK!';
+    $scope.alert_mesg = 'That nick is available.';
+  });
+  socket.on('nick-reg', function(pack) {
+    $scope.alert_type = 'info';
+    $scope.alert_head = 'Registered'
+    $scope.alert_mesg = 'as "' + pack.nick + '".';
   });
 
   // broadcast a message
@@ -31,6 +46,7 @@ function ChatCtrl($scope, socket) {
     socket.emit('nick-chk', { nick: $scope.nick });
   };
   $scope.register = function() {
+    alert_reset();
     socket.emit('nick-reg', { nick: $scope.nick });
     $scope.nick = '';
   };

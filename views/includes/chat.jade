@@ -1,11 +1,11 @@
 div(ng-controller='ChatCtrl')
   h3 Chat
   form(ng-submit='register()')
-    div.input-append
-      input(type='text', placeholder='Register a nick?',
-            ng-model='nick', ng-change='change()')
-      span.add-on
-        i(class='icon-{{nick_status}}')
+    div(class='alert alert-{{alert_type}}')
+      strong {{alert_head}}
+      |  {{alert_mesg}}
+    input(type='text', placeholder='Register a nick?',
+          ng-model='nick', ng-change='change()')
   form(ng-submit='chat()')
     input(type='text', ng-model='msg', placeholder='Have something to say?')
   ul.unstyled

@@ -35,7 +35,7 @@ function Chat() {
 
   function reg_nick(nick, socket) {
     if(!nick_available(nick))
-      return;
+      return false;
     var sender = calc_sender(socket);
     var found = find_sender(sender);
     if(found !== undefined) {
@@ -43,6 +43,7 @@ function Chat() {
     } else {
       self.registered.push({ sender: sender, nick: nick });
     }
+    return true;
   }
 
   function calc_name(socket) {
@@ -66,7 +67,8 @@ function Chat() {
       socket.emit(avail ? 'nick-avail' : 'nick-invalid', pack);
     });
     socket.on('nick-reg', function(pack) {
-      reg_nick(pack.nick, socket);
+      reg_nick(pack.nick, socket)
+      socket.emit('nick-reg', { nick: calc_name(socket) })
     });
   };
 }

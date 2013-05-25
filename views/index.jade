@@ -9,13 +9,19 @@ block append scripts
 block content
   h1 "lightningthieves" Mining Status Center
   div.row
-    div.span3
-      include includes/update
+    div.span4
       include includes/exchange
+    div.span4
       include includes/reward
+    div.span4
       include includes/mining
-    div.span6
-      include includes/about
-    div.span3
-      include includes/connection
+  div.row
+    div.span8
+      div.row
+        div.span4
+          include includes/connection
+          include includes/update
+        div.span4
+          include includes/about
+    div.span4
       include includes/chat

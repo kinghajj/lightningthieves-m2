@@ -38,7 +38,6 @@ function Chat() {
       return;
     var sender = calc_sender(socket);
     var found = find_sender(sender);
-    console.log('registering ' + nick + ' to ' + sender);
     if(found !== undefined) {
       self.registered[found].nick = nick;
     } else {
@@ -49,8 +48,6 @@ function Chat() {
   function calc_name(socket) {
     var sender = calc_sender(socket);
     var found = find_sender(sender);
-    console.log(found);
-    console.log(self.registered[found].nick);
     return found !== undefined ? self.registered[found].nick : sender;
   }
 
@@ -62,7 +59,6 @@ function Chat() {
     });
     socket.on('chat', function(pack) {
       var name = calc_name(socket), msg = sanitize(pack.msg).escape();
-      console.log('delivering message from ' + name + ': ' + msg);
       conn.sockets.emit('chat', { name: name, msg: msg });
     });
     socket.on('nick-chk', function(pack) {

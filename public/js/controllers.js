@@ -119,7 +119,6 @@ function UpdateCtrl($scope, updates) {
 UpdateCtrl.$inject = ['$scope', 'updates'];
 
 function ConnCtrl($scope, socket) {
-  $scope.init = false;
   $scope.connection_count = 0;
   $scope.connection_when = {'0': 'Nobody is connected. How do you see this...?',
                             '1': "You're the only one here. Congratulations.",
@@ -167,14 +166,7 @@ function ConnCtrl($scope, socket) {
 
   // wait for news, update the model
   socket.on('connection_count', function(pack) {
-    $scope.init = true;
     $scope.connection_count = pack.connection_count;
   });
-
-  // periodically request more news
-  setInterval(function() {
-    socket.emit('connection_count');
-  }, 60000);
-  socket.emit('connection_count');
 }
 ConnCtrl.$inject = ['$scope', 'socket'];

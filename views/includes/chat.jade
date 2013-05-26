@@ -1,15 +1,18 @@
 div(ng-controller='ChatCtrl')
-  h3 Chat
-  form(ng-submit='register()')
-    div(class='alert alert-{{alert_type}}')
-      strong {{alert_head}}
-      |  {{alert_mesg}}
-    input(type='text', placeholder='Register a nick?',
-          ng-model='nick', ng-change='change()')
-  form(ng-submit='chat()')
-    input(type='text', ng-model='msg', placeholder='Have something to say?')
-  ul.unstyled
-    li(ng-repeat='line in chat_lines')
-      p.chat-line
-        strong {{ line.name }}
-        | : {{ line.msg }}
+  div.row
+    div.span4
+      h3 Chat
+      form(ng-submit='register()')
+        div(class='alert alert-{{alert_type}}')
+          strong {{alert_head}}
+          |  {{alert_mesg}}
+        input(type='text', placeholder='Register a nick?',
+              ng-model='nick', ng-change='change()')
+      form(ng-submit='chat()')
+        input(type='text', ng-model='msg', placeholder='Have something to say?')
+    div.span4
+      ul.unstyled
+        li(ng-repeat='line in chat_lines')
+          p.chat-line
+            strong {{ line.name }}
+            | : {{ line.msg }}

@@ -92,6 +92,7 @@ RewardCtrl.$inject = ['$scope', 'states'];
 
 function MiningCtrl($scope, states) {
   $scope.convert = states.get('convert');
+  $scope.currency = states.get('currency');
   $scope.alert_type = 'info';
   $scope.alert_head = 'Nothing.';
   $scope.alert_mesg = 'Waiting...';
@@ -99,6 +100,9 @@ function MiningCtrl($scope, states) {
   states.on('convert', function(convert) {
     $scope.convert = convert;
   });
+  states.on('currency', function(currency) {
+    $scope.currency = currency;
+  })
   states.on('news', function(news) {
     $scope.hash_rate = news.ktr.hashrate;
     $scope.difficulty = news.gml_api.difficulty;
